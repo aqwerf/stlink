@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
     parse_options(argc, argv, &state);
     switch (state.stlink_version) {
         case 2:
-            sl = stlink_open_usb(state.logging_level, 0);
+            sl = stlink_open_usb(state.logging_level, state.reset);
             if(sl == NULL) return 1;
             break;
         case 1:
@@ -185,10 +185,6 @@ int main(int argc, char** argv) {
     connected_stlink = sl;
     signal(SIGINT, &cleanup);
     signal(SIGTERM, &cleanup);
-
-    if (state.reset) {
-        stlink_reset(sl);
-    }
 
     ILOG("Chip ID is %08x, Core ID is  %08x.\n", sl->chip_id, sl->core_id);
 
